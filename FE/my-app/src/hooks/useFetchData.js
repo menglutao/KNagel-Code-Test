@@ -21,7 +21,7 @@ function useFetchData(url){
             console.log("response:",response.data)
             
           } catch (err) {
-            setError(err);
+            setError(err.message); // change to err.message instead of an object to avoid react rendering error 
             setLoading(false);
           }
         }
