@@ -26,7 +26,7 @@ export default function Home() {
                       <th>CONSIGNEE</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody> 
                     {data && data.map((item, index) => (
                       <tr className="border-b dark:border-neutral-500" key={index}>
                         <td className="whitespace-nowrap px-6 py-4">{item.orderNo}</td>
