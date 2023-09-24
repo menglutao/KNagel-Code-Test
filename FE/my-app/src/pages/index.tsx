@@ -1,7 +1,8 @@
 import { Inter } from 'next/font/google';
 import useFetchData from '../hooks/useFetchData';
-
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircle, faCircleInfo, faEraser, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
+import Link from 'next/link';
 const inter = Inter({ subsets: ['latin'] })
 const API_URL = 'https://my.api.mockaroo.com/shipments.json?key=5e0b62d0';
 
@@ -9,6 +10,9 @@ export default function Home() {
   const { data, loading, error } = useFetchData(API_URL);
   if (loading) return <div>Loading...</div>
   if (error) return <div>Error: {error}</div>
+  const handleDelete =(index) =>{
+    console.log(`delete ${index}`)
+  }
 
   return (
     <main>
@@ -32,7 +36,7 @@ export default function Home() {
                     <th scope="col"
                       className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CONSIGNEE</th>
                     <th scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">xxx </th>
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">      </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -44,6 +48,10 @@ export default function Home() {
                       <td className="px-6 py-4 whitespace-nowrap">{item.trackingNo}</td>
                       <td className="px-6 py-4 whitespace-nowrap">{item.status}</td>
                       <td className="px-6 py-4 whitespace-nowrap">{item.consignee}</td>
+                      <td>
+                        <Link href={`/details/${index}?orderNo=${item.orderNo}&date=${item.date}&customer=${item.customer}&trackingNo=${item.trackingNo}&status=${item.status}&consignee=${item.consignee}`}><FontAwesomeIcon icon={faCircleInfo} className="cursor-pointer mr-2.5" /></Link>
+                        <button className="cursor-pointer mr-2.5" onClick={() => handleDelete(index)}> <FontAwesomeIcon icon={faEraser} /></button>
+                      </td>
                     </tr>)
                   )}
                 </tbody>
