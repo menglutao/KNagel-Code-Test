@@ -40,7 +40,7 @@ function useFetchData(url){
         fetchData();
       }, [url]); // useEffect will only re-execute when value changes in the array
     
-      return { data, loading, error };
+      return { data, loading, error }; // return an object with three attributes
     }
 
 export default useFetchData;

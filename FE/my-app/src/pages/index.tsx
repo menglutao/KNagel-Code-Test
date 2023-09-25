@@ -1,5 +1,6 @@
 import { Inter } from 'next/font/google';
 import useFetchData from '../hooks/useFetchData';
+import useHandleDelete from '../hooks/useHandleDelete';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircle, faCircleInfo, faEraser, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
@@ -7,12 +8,13 @@ const inter = Inter({ subsets: ['latin'] })
 const API_URL = 'https://my.api.mockaroo.com/shipments.json?key=5e0b62d0';
 
 export default function Home() {
-  const { data, loading, error } = useFetchData(API_URL);
+  const { data : fetchData, loading, error } = useFetchData(API_URL);
+  const [data,isDeleted,handleDetele]  = useHandleDelete(fetchData);
   if (loading) return <div>Loading...</div>
   if (error) return <div>Error: {error}</div>
-  const handleDelete =(index) =>{
-    console.log(`delete ${index}`)
-  }
+  
+  const displayData = isDeleted ? data : fetchData;
+
 
   return (
     <main>
@@ -40,7 +42,7 @@ export default function Home() {
                   </tr>
                 </thead>
                 <tbody>
-                  {data && data.map((item, index) => (
+                  {displayData && displayData.map((item, index) => (
                     <tr className="px-6 py-4 whitespace-nowrap" key={index}>
                       <td className="px-6 py-4 whitespace-nowrap">{item.orderNo}</td>
                       <td className="px-6 py-4 whitespace-nowrap">{item.date}</td>
@@ -50,7 +52,7 @@ export default function Home() {
                       <td className="px-6 py-4 whitespace-nowrap">{item.consignee}</td>
                       <td>
                         <Link href={`/details/${index}?orderNo=${item.orderNo}&date=${item.date}&customer=${item.customer}&trackingNo=${item.trackingNo}&status=${item.status}&consignee=${item.consignee}`}><FontAwesomeIcon icon={faCircleInfo} className="cursor-pointer mr-2.5" /></Link>
-                        <button className="cursor-pointer mr-2.5" onClick={() => handleDelete(index)}> <FontAwesomeIcon icon={faEraser} /></button>
+                        <button className="cursor-pointer mr-2.5" onClick={() => handleDetele(index)}> <FontAwesomeIcon icon={faEraser} /></button>
                       </td>
                     </tr>)
                   )}
