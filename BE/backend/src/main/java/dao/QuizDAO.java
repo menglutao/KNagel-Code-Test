@@ -22,7 +22,7 @@ public class QuizDAO {
         password = dotenv.get("password");
     }
 
-    public class QuestionResult {
+    public static class QuestionResult {
         public int questionId;
         public String topic;
         public String difficultyRank;
@@ -34,13 +34,11 @@ public class QuizDAO {
     public static void main(String[] args) {
         try {
             System.out.println("Starting...");
-
-            insertData();
-            // 可以添加更多的方法调用以进行测试，例如:
+            // DatabaseInitializer();
+            // insertData();
             // updateData();
             // deleteData();
-            // List<QuestionResult> results = SearchQuestionByTopic();
-            // printResults(results); // 你可能需要定义这个printResults方法来显示结果
+            List<QuestionResult> results = searchQuestionsByTopic();
 
             System.out.println("Done!");
         } catch (Exception e) {
@@ -51,6 +49,33 @@ public class QuizDAO {
 
     private static Connection getDatabaseConnection() throws SQLException {
         return DriverManager.getConnection(dbUrl, user, password);
+    }
+
+    public static void DatabaseInitializer() {
+        try (Connection conn = getDatabaseConnection(); Statement stmt = conn.createStatement()) {
+            String create_table_quiz = "create table  quiz (\n" + //
+                    "question_id serial primary key,\n" + //
+                    "topic TEXT not null,\n" + //
+                    "difficulty_rank INT not null,\n" + //
+                    "question_content TEXT not null\n" + //
+                    "); \n" + //
+                    "";
+
+            String create_table_responses = "create table responses(\n" + //
+                    "response_id serial primary key,\n" + //
+                    "question_id INT not null references quiz(question_id) on delete cascade,\n" + //
+                    "response_text TEXT not null,\n" + //
+                    "is_answer_correct BOOLEAN not null\n" + //
+                    ");";
+            stmt.execute(create_table_quiz);
+            stmt.execute(create_table_responses);
+        } catch (SQLException se) {
+            System.out.println("Error executing SQL query: " + se.getMessage());
+            se.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("General error: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public static void insertData() {
@@ -191,7 +216,7 @@ public class QuizDAO {
         }
     }
 
-    public List<QuestionResult> searchQuestionsByTopic() {
+    public static List<QuestionResult> searchQuestionsByTopic() {
         List<QuestionResult> results = new ArrayList<>();
 
         try (Connection conn = getDatabaseConnection(); Statement stmt = conn.createStatement()) {
@@ -206,16 +231,8 @@ public class QuizDAO {
                 result.topic = rs.getString("topic");
                 result.difficultyRank = rs.getString("difficulty_rank");
                 result.questionContent = rs.getString("question_content");
-                result.responseText = rs.getString("responseText");
+                result.responseText = rs.getString("response_text");
                 result.isAnswerCorrect = rs.getBoolean("is_answer_correct");
-                // // Print the values
-                // System.out.println("Question ID: " + result.questionId);
-                // System.out.println("Topic: " + result.topic);
-                // System.out.println("Difficulty Rank: " + result.difficultyRank);
-                // System.out.println("Question Content: " + result.questionContent);
-                // System.out.println("Response Text: " + result.responseText);
-                // System.out.println("Is Answer Correct: " + result.isAnswerCorrect);
-                // System.out.println("-------------------------------");
             }
         } catch (SQLException se) {
             System.out.println("Error executing SQL query: " + se.getMessage());
