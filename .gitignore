@@ -1,0 +1,4 @@
+
+*.class
+BE/backend/target/*
+settings.json
