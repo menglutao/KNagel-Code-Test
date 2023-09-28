@@ -38,7 +38,7 @@ public class QuizDAO {
             // insertData();
             // updateData();
             // deleteData();
-            List<QuestionResult> results = searchQuestionsByTopic();
+            // List<QuestionResult> results = searchQuestionsByTopic();
 
             System.out.println("Done!");
         } catch (Exception e) {
@@ -203,9 +203,9 @@ public class QuizDAO {
 
     public static void deleteData() {
         try (Connection conn = getDatabaseConnection(); Statement stmt = conn.createStatement()) {
-            String delete_table_quiz = "delete from quiz \n" + //
+            String delete_a_question = "delete from quiz \n" + //
                     "where question_id = '2';";
-            stmt.execute(delete_table_quiz);
+            stmt.execute(delete_a_question);
 
         } catch (SQLException se) {
             System.out.println("Error executing SQL query: " + se.getMessage());
@@ -244,4 +244,18 @@ public class QuizDAO {
         return results;
     };
 
+    public static void deleteAllData() {
+        try (Connection conn = getDatabaseConnection(); Statement stmt = conn.createStatement()) {
+            String delete_table_quiz = "DROP TABLE quiz CASCADE;";
+            String delete_table_responses = "DROP TABLE responses  CASCADE;";
+            stmt.execute(delete_table_quiz);
+            stmt.execute(delete_table_responses);
+        } catch (SQLException se) {
+            System.out.println("Error executing SQL query: " + se.getMessage());
+            se.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("General error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 }

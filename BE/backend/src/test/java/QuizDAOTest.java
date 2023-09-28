@@ -4,19 +4,19 @@ import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.After;
+
+import main.java.dao.QuizDAO;
 
 public class QuizDAOTest {
 
     @Before
-    public void setUp() throws Exception {
-    }
-
-    @Test
-    public void testInsertData() {
+    public void setup() {
         try {
+            QuizDAO.DatabaseInitializer();
             QuizDAO.insertData();
         } catch (Exception e) {
-            fail("InsertData method failed with exception: " + e.getMessage());
+            fail("Setup method failed with exception: " + e.getMessage());
         }
     }
 
@@ -44,6 +44,15 @@ public class QuizDAOTest {
             assertNotNull(QuizDAO.searchQuestionsByTopic());
         } catch (Exception e) {
             fail("SearchQuestionsByTopic method failed with exception: " + e.getMessage());
+        }
+    }
+
+    @After
+    public void cleanData() {
+        try {
+            QuizDAO.deleteAllData();
+        } catch (Exception e) {
+            fail("Setup method failed with exception: " + e.getMessage());
         }
     }
 }
