@@ -1,0 +1,5 @@
+
+*.class
+BE/backend/target/*
+settings.json
+.env
