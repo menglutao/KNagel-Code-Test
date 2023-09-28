@@ -1,3 +1,9 @@
+'''
+fake_data_generator.py
+This is for generating SQL statments for testing the functions of operating database.
+
+
+'''
 from faker import Faker
 import random
 
